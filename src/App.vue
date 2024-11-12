@@ -1,27 +1,39 @@
 <template>
-  <div class="bg-blue-500 text-white p-4">
-    <h1 class="text-2xl">Welcome to Can Manager</h1>
+  <div class="app">
+    <header><h1>Interactive Can Manager</h1></header>
+    <AddCan @add-can="addCan" />
+    <CanFilter @filter-change="filterCans" />
+    <CanList :cans="filteredCans" @delete-can="deleteCan" />
   </div>
 </template>
 
-<script>
-/* import HelloWorld from './components/HelloWorld.vue' */
+<script setup>
+import { ref, computed } from 'vue';
+import AddCan from './components/AddCan.vue';
+import CanFilter from './components/CanFilter.vue';
+import CanList from './components/CanList.vue';
 
-export default {
-  name: 'App',
-  components: {
-    /* HelloWorld */
-  }
-}
+const cans = ref([]);
+const filterText = ref('');
+
+const addCan = (newCan) => {
+  cans.value.push(newCan);
+};
+
+const deleteCan = (canName) => {
+  cans.value = cans.value.filter(can => can.name !== canName);
+};
+
+const filterCans = (text) => {
+  filterText.value = text;
+};
+
+const filteredCans = computed(() => {
+  if (!filterText.value) return cans.value;
+  return cans.value.filter(can => can.name.includes(filterText.value));
+});
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
+
 </style>
