@@ -34,13 +34,11 @@
               <input id="name" v-model="name" type="text" placeholder="Can Name" required
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white" />
             </div>
-
             <div>
-              <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image URL</label>
-              <input id="image" v-model="image" type="url" placeholder="Image URL" required
+              <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image File</label>
+              <input id="image" type="file" @change="handleFileChange" required
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white" />
             </div>
-
             <div>
               <label for="description"
                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
@@ -67,9 +65,17 @@ import { ref } from 'vue';
 // Define the modal visibility state
 const showModal = ref(false);
 
+const file = ref(null);
 const name = ref('');
 const image = ref('');
 const description = ref('');
+
+const handleFileChange = (event) => {
+  const selectedFile = event.target.files[0];
+  if (selectedFile) {
+    file.value = selectedFile;
+  }
+};
 
 const emit = defineEmits(['add-can']);
 const submitForm = () => {
