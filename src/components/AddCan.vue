@@ -78,25 +78,29 @@ const handleFileChange = (event) => {
 };
 
 const emit = defineEmits(['add-can']);
+
 const submitForm = () => {
   const formData = new FormData();
   formData.append('can_image', file.value);
+  formData.append('name', name.value); // Include name
+  formData.append('description', description.value); // Include description
 
   $.ajax({
-    url: 'http://localhost/can-manager/include/requests.php', 
+    url: 'http://localhost/can-manager/include/requests.php',
     type: 'POST',
     data: formData,
-    processData: false, // Prevent jQuery from automatically transforming the FormData object into a query string
-    contentType: false, // Let jQuery know FormData is sent
+    processData: false,
+    contentType: false,
     success: function (response) {
       const data = JSON.parse(response);
       if (data.url) {
         emit('add-can', { name: name.value, image: data.url, description: description.value });
 
+        // Clear form data and close the modal
         name.value = '';
         file.value = null;
         description.value = '';
-        showModal.value = false; // Close the modal after submission
+        showModal.value = false;
       } else {
         console.error('Error:', data.error);
       }
@@ -106,6 +110,7 @@ const submitForm = () => {
     }
   });
 };
+
 
 </script>
 
