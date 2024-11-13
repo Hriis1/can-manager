@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+can-data.json
+images/*
+
 
 # local env files
 .env.local
