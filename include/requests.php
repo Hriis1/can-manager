@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Get the file details
-        $file = $_FILES['image'];
+        $file = $_FILES['can_image'];
         $fileName = time() . '-' . basename($file['name']); // Create a unique file name
         $filePath = $uploadDir . $fileName;
 
