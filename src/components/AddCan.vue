@@ -86,7 +86,7 @@ const submitForm = () => {
   formData.append('description', description.value); // Include description
 
   $.ajax({
-    url: 'http://localhost/can-manager/include/requests.php',
+    url: 'include/requests.php',
     type: 'POST',
     data: formData,
     processData: false,

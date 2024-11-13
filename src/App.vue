@@ -8,13 +8,27 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import AddCan from './components/AddCan.vue';
 import CanFilter from './components/CanFilter.vue';
 import CanList from './components/CanList.vue';
 
 const cans = ref([]);
 const filterText = ref('');
+
+//Load initial cans
+onMounted(async () => {
+  try {
+    const response = await fetch('/can-data.json');
+    if (!response.ok) {
+      throw new Error('Failed to load can data');
+    }
+    const data = await response.json();
+    cans.value = data; // Populate cans with the loaded data
+  } catch (error) {
+    console.error('Error loading can data:', error);
+  }
+});
 
 const addCan = (newCan) => {
   cans.value.push(newCan);
