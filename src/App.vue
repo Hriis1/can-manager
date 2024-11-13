@@ -8,7 +8,6 @@
 </template>
 
 <script setup>
-import $ from 'jquery';
 import { ref, computed } from 'vue';
 import AddCan from './components/AddCan.vue';
 import CanFilter from './components/CanFilter.vue';

@@ -35,8 +35,8 @@
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white" />
             </div>
             <div>
-              <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image File</label>
-              <input id="image" type="file" @change="handleFileChange" required
+              <label for="can_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image File</label>
+              <input id="can_image" type="file" @change="handleFileChange" required
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white" />
             </div>
             <div>
@@ -60,6 +60,7 @@
 </template>
 
 <script setup>
+import $ from 'jquery';
 import { ref } from 'vue';
 
 // Define the modal visibility state
@@ -67,7 +68,6 @@ const showModal = ref(false);
 
 const file = ref(null);
 const name = ref('');
-const image = ref('');
 const description = ref('');
 
 const handleFileChange = (event) => {
@@ -79,12 +79,34 @@ const handleFileChange = (event) => {
 
 const emit = defineEmits(['add-can']);
 const submitForm = () => {
-  emit('add-can', { name: name.value, image: image.value, description: description.value });
-  name.value = '';
-  image.value = '';
-  description.value = '';
-  showModal.value = false; // Close the modal after submission
+  const formData = new FormData();
+  formData.append('can_image', file.value);
+
+  $.ajax({
+    url: 'http://localhost/can-manager/include/requests.php', 
+    type: 'POST',
+    data: formData,
+    processData: false, // Prevent jQuery from automatically transforming the FormData object into a query string
+    contentType: false, // Let jQuery know FormData is sent
+    success: function (response) {
+      const data = JSON.parse(response);
+      if (data.url) {
+        emit('add-can', { name: name.value, image: data.url, description: description.value });
+
+        name.value = '';
+        file.value = null;
+        description.value = '';
+        showModal.value = false; // Close the modal after submission
+      } else {
+        console.error('Error:', data.error);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.error('Error uploading image:', textStatus, errorThrown);
+    }
+  });
 };
+
 </script>
 
 <style scoped></style>
