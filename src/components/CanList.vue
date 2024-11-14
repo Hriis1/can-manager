@@ -29,16 +29,10 @@
             <img :src="can.image" alt="Can Image" class="w-16 h-auto" />
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <button
-              @click="openModal(can)"
-              class="text-blue-600 hover:text-blue-900 mr-4"
-            >
+            <button @click="openModal(can)" class="text-blue-600 hover:text-blue-900 mr-4">
               View
             </button>
-            <button
-              @click="deleteCan(can.id)"
-              class="text-red-600 hover:text-red-900"
-            >
+            <button @click="deleteCan(can.id)" class="text-red-600 hover:text-red-900">
               Delete
             </button>
           </td>
@@ -48,14 +42,8 @@
 
     <!-- Modal for displaying CanCard -->
     <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white rounded-lg p-6 max-w-md w-full">
-        <CanCard :can="selectedCan" />
-        <button
-          @click="closeModal"
-          class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
-        >
-          Close
-        </button>
+      <div class="">
+        <CanCard :can="selectedCan" :close="closeModal" />
       </div>
     </div>
   </div>
@@ -83,7 +71,7 @@ const closeModal = () => {
 };
 
 const deleteCan = (canId) => {
-  emit('delete-can', canId); // Emit the id instead of the name
+  emit('delete-can', canId);
 };
 </script>
 
@@ -111,5 +99,9 @@ const deleteCan = (canId) => {
 
 .justify-center {
   justify-content: center;
+}
+
+.card-min-width {
+  min-width: 500px;
 }
 </style>
