@@ -72,9 +72,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             http_response_code(500);
             echo json_encode(['error' => 'Failed to move uploaded file']);
         }
+    } 
+    else if (isset($_POST['deleteCanId'])) 
+    {
+        $canId = $_POST['deleteCanId'];
+
+        if ($canId === null) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing can id']);
+            exit;
+        }
+
+        // File path for the JSON data
+        $jsonFile = '../can-data.json';
+
+        // Read existing data from can-data.json
+        if (!file_exists($jsonFile)) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Data file not found']);
+            exit;
+        }
+
+        $existingData = json_decode(file_get_contents($jsonFile), true);
+        if (!is_array($existingData)) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Invalid data format']);
+            exit;
+        }
+
+        // Find the can with the given id
+        $canToDelete = null;
+        foreach ($existingData as $index => $can) {
+            if ($can['id'] == $canId) {
+                $canToDelete = $can;
+                unset($existingData[$index]);
+                break;
+            }
+        }
+
+        if ($canToDelete === null) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Can not found']);
+            exit;
+        }
+
+        // Delete the image file
+        $imagePath = '../images/' . basename($canToDelete['image']);
+        if (file_exists($imagePath)) {
+            unlink($imagePath); // Delete the image file
+        }
+
+        // Save the updated data back to can-data.json
+        file_put_contents($jsonFile, json_encode(array_values($existingData), JSON_PRETTY_PRINT));
+
+        echo json_encode(['message' => 'Can deleted successfully']);
     } else {
         http_response_code(400);
-        echo json_encode(['error' => 'Missing file or form data']);
+        echo json_encode(['error' => 'Missing data']);
     }
 } else {
     http_response_code(405);

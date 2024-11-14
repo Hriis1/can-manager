@@ -35,8 +35,22 @@ const addCan = (newCan) => {
 };
 
 const deleteCan = (canId) => {
-  cans.value = cans.value.filter(can => can.id !== canId);
+  // Send AJAX request to delete the can
+  $.ajax({
+    url: 'include/requests.php',
+    type: 'POST',
+    data: { deleteCanId: canId },
+    success: function () {
+      // Remove the can from the cans array in Vue
+      cans.value = cans.value.filter(can => can.id !== canId);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.error('Error:', textStatus, errorThrown);
+    }
+  });
 };
+
+
 
 const filterCans = (text) => {
   filterText.value = text;
