@@ -28,24 +28,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $canName = $_POST['name'];
             $canDescription = $_POST['description'];
 
-            // Prepare the data to be saved to can-data.json
-            $newCanData = [
-                'name' => $canName,
-                'image' => $imageUrl,
-                'description' => $canDescription
-            ];
-
             // File path for the JSON data
             $jsonFile = '../can-data.json';
 
             // Read existing data from can-data.json, if it exists
             $existingData = [];
+            $maxId = 0;
             if (file_exists($jsonFile)) {
                 $existingData = json_decode(file_get_contents($jsonFile), true);
                 if (!is_array($existingData)) {
                     $existingData = []; // Ensure it's an array if the file was empty or corrupted
                 }
+
+                // Find the highest existing id
+                foreach ($existingData as $can) {
+                    if (isset($can['id']) && $can['id'] > $maxId) {
+                        $maxId = $can['id'];
+                    }
+                }
             }
+
+            // Create the new can data with an incremented id
+            $newCanData = [
+                'id' => $maxId + 1,
+                'name' => $canName,
+                'image' => $imageUrl,
+                'description' => $canDescription
+            ];
 
             // Add the new can data to the existing data array
             $existingData[] = $newCanData;
@@ -53,8 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Save the updated data back to can-data.json
             file_put_contents($jsonFile, json_encode($existingData, JSON_PRETTY_PRINT));
 
-            // Return the image URL in the response
-            echo json_encode(['url' => $imageUrl, 'message' => 'Data saved successfully']);
+            // Return the image URL and success message in the response
+            echo json_encode([
+                'id' => $maxId + 1,
+                'url' => $imageUrl,
+                'message' => 'Data saved successfully'
+            ]);
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Failed to move uploaded file']);
@@ -67,4 +80,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'Invalid request method']);
 }
-

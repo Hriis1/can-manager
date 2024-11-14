@@ -35,7 +35,8 @@
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white" />
             </div>
             <div>
-              <label for="can_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image File</label>
+              <label for="can_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image
+                File</label>
               <input id="can_image" type="file" @change="handleFileChange" required
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white" />
             </div>
@@ -93,7 +94,12 @@ const submitForm = () => {
     success: function (response) {
       const data = JSON.parse(response);
       if (data.url) {
-        emit('add-can', { name: name.value, image: data.url, description: description.value });
+        emit('add-can', {
+          id: data.id,
+          name: name.value,
+          image: data.url,
+          description: description.value,
+        });
 
         // Clear form data and close the modal
         name.value = '';

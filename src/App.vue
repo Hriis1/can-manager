@@ -34,8 +34,8 @@ const addCan = (newCan) => {
   cans.value.push(newCan);
 };
 
-const deleteCan = (canName) => {
-  cans.value = cans.value.filter(can => can.name !== canName);
+const deleteCan = (canId) => {
+  cans.value = cans.value.filter(can => can.id !== canId);
 };
 
 const filterCans = (text) => {

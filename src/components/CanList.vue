@@ -4,6 +4,9 @@
       <thead class="bg-gray-50">
         <tr>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            ID
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             Name
           </th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -18,7 +21,8 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <tr v-for="can in props.cans" :key="can.name">
+        <tr v-for="can in props.cans" :key="can.id"> <!-- Use the id as the key -->
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ can.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ can.name }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ can.description }}</td>
           <td class="px-6 py-4 whitespace-nowrap">
@@ -32,7 +36,7 @@
               View
             </button>
             <button
-              @click="deleteCan(can.name)"
+              @click="deleteCan(can.id)"
               class="text-red-600 hover:text-red-900"
             >
               Delete
@@ -78,13 +82,13 @@ const closeModal = () => {
   selectedCan.value = null;
 };
 
-const deleteCan = (canName) => {
-  emit('delete-can', canName);
+const deleteCan = (canId) => {
+  emit('delete-can', canId); // Emit the id instead of the name
 };
 </script>
 
 <style scoped>
-/* Custom styles for modal */
+/* Modal styling */
 .fixed {
   position: fixed;
   top: 0;
