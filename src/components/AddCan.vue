@@ -60,7 +60,6 @@
 </template>
 
 <script setup>
-import $ from 'jquery';
 import { ref } from 'vue';
 
 // Define the modal visibility state
