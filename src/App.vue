@@ -1,11 +1,29 @@
 <template>
-  <div class="app">
-    <AppHeader />
-    <AddCan @add-can="addCan" />
-    <CanFilter @filter-change="filterCans" />
-    <CanList :cans="filteredCans" @delete-can="deleteCan" />
+  <div class="app min-h-screen bg-gray-100 p-4">
+    <AppHeader class="mb-4" />
+
+    <div class="container mx-auto">
+      <!-- Main content wrapper with a grid layout -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- AddCan Component -->
+        <div class="md:col-span-1 bg-white p-4 rounded shadow">
+          <AddCan @add-can="addCan" />
+        </div>
+
+        <!-- CanFilter Component -->
+        <div class="md:col-span-2 flex items-center bg-white p-4 rounded shadow">
+          <CanFilter @filter-change="filterCans" />
+        </div>
+      </div>
+
+      <!-- CanList Component -->
+      <div class="mt-6 bg-white p-4 rounded shadow">
+        <CanList :cans="filteredCans" @delete-can="deleteCan" />
+      </div>
+    </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
