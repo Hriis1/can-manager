@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <header><h1>Interactive Can Manager</h1></header>
+    <AppHeader />
     <AddCan @add-can="addCan" />
     <CanFilter @filter-change="filterCans" />
     <CanList :cans="filteredCans" @delete-can="deleteCan" />
@@ -9,6 +9,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import AppHeader from './components/AppHeader.vue';
 import AddCan from './components/AddCan.vue';
 import CanFilter from './components/CanFilter.vue';
 import CanList from './components/CanList.vue';
